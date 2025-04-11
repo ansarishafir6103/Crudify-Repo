@@ -1,0 +1,113 @@
+﻿@* @model Crudify.Models.TblEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Add Employee</h4>
+<hr />
+<form class="row g-3" asp-action="Create">
+    <div class="col-md-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="EmployeeFirstName" class="control-label"></label>
+            <input asp-for="EmployeeFirstName" class="form-control" />
+            <span asp-validation-for="EmployeeFirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EmployeeLastName" class="control-label"></label>
+            <input asp-for="EmployeeLastName" class="form-control" />
+            <span asp-validation-for="EmployeeLastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EmployeeDateOfBirth" class="control-label"></label>
+            <input asp-for="EmployeeDateOfBirth" class="form-control" />
+            <span asp-validation-for="EmployeeDateOfBirth" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EmployeePhoto" class="control-label"></label>
+            <input asp-for="EmployeePhoto" class="form-control" />
+            <span asp-validation-for="EmployeePhoto" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EmployeeEmail" class="control-label"></label>
+            <input asp-for="EmployeeEmail" class="form-control" />
+            <span asp-validation-for="EmployeeEmail" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EmployeePincode" class="control-label"></label>
+            <input asp-for="EmployeePincode" class="form-control" />
+            <span asp-validation-for="EmployeePincode" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="CountryId" class="control-label"></label>
+            <select asp-for="CountryId" class="form-control"></select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="StateId" class="control-label"></label>
+            <select asp-for="StateId" class="form-control" asp-items="ViewBag.StateId"></select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="CityId" class="control-label"></label>
+            <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="DepartmentId" class="control-label"></label>
+            <select asp-for="DepartmentId" class="form-control" asp-items="@(new SelectList(ViewBag.DepartmentId, "Value", "Text"))">
+                <option value="">--select--</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label asp-for="EmployeeGender" class="control-label"></label>
+            <input asp-for="EmployeeGender" class="form-control" />
+            <span asp-validation-for="EmployeeGender" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            @foreach (var checkbox in Model.TblHobbies)
+            {
+                <label asp-for="@checkbox.HobbyId" class="control-label">@checkbox.HobbyText</label>
+                <input class="form-check-input" type="checkbox" value="@checkbox.HobbyId"
+                       id="checkbox_@checkbox.HobbyId" name="FavouriteHobbies">
+            }
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+ *@

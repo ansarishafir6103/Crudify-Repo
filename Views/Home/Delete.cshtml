@@ -1,0 +1,46 @@
+﻿@model Crudify.Models.TblEmployee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<h3 class="text-danger">Are you sure you want to delete this employee?</h3>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Employee Details</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name:</dt>
+            <dd class="col-sm-9">
+                @(Model != null ? $"{Model.EmployeeFirstName} {Model.EmployeeLastName}" : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">
+                @(Model?.EmployeeEmail ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Phone:</dt>
+            <dd class="col-sm-9">
+                @(Model?.EmployeePhone ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Department:</dt>
+            <dd class="col-sm-9">
+                @(Model?.Department?.DepartmentName ?? "N/A")
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer text-muted">
+        <form asp-action="DeleteConfirmed" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="EmployeeId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

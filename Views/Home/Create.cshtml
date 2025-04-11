@@ -1,0 +1,128 @@
+﻿@model Crudify.Models.TblEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+@* <style>
+    body {
+        overflow: hidden; /* Disable scrollbars */
+    }
+</style> *@
+
+<div class="container my-2">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-primary text-white py-2 px-3">
+            <h5 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i> Add New Employee</h5>
+        </div>
+
+        <div class="card-body p-3">
+            <form asp-action="Create" enctype="multipart/form-data" method="post" class="row g-2">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2 small"></div>
+
+                <!-- Personal Info -->
+                <div class="col-12 fw-semibold text-secondary">Personal Info</div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.EmployeeFirstName" class="form-label small">First Name</label>
+                    <input asp-for="Employee.EmployeeFirstName" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeeFirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.EmployeeLastName" class="form-label small">Last Name</label>
+                    <input asp-for="Employee.EmployeeLastName" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeeLastName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.EmployeeDateOfBirth" class="form-label small">DOB</label>
+                    <input asp-for="Employee.EmployeeDateOfBirth" type="date" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeeDateOfBirth" class="text-danger small"></span>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-12 fw-semibold text-secondary mt-2">Contact Info</div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.EmployeeEmail" class="form-label small">Email</label>
+                    <input asp-for="Employee.EmployeeEmail" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeeEmail" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.EmployeePhoto" class="form-label small">Photo</label>
+                    <input asp-for="Employee.EmployeePhoto" type="file" name="Photo" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeePhoto" class="text-danger small"></span>
+                </div>
+
+                <!-- Address -->
+                <div class="col-12 fw-semibold text-secondary mt-2">Address</div>
+                <div class="col-md-4">
+                    <label asp-for="Employee.EmployeePincode" class="form-label small">Pincode</label>
+                    <input asp-for="Employee.EmployeePincode" class="form-control form-control-sm" />
+                    <span asp-validation-for="Employee.EmployeePincode" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Employee.CountryId" class="form-label small">Country</label>
+                    <select asp-for="Employee.CountryId" class="form-select form-select-sm" asp-items="ViewBag.CountryId"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Employee.StateId" class="form-label small">State</label>
+                    <select asp-for="Employee.StateId" class="form-select form-select-sm" asp-items="ViewBag.StateId"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Employee.CityId" class="form-label small">City</label>
+                    <select asp-for="Employee.CityId" class="form-select form-select-sm" asp-items="ViewBag.CityId"></select>
+                </div>
+
+                <!-- Employment -->
+                <div class="col-12 fw-semibold text-secondary mt-2">Employment</div>
+                <div class="col-md-6">
+                    <label asp-for="Employee.DepartmentId" class="form-label small">Department</label>
+                    <select asp-for="Employee.DepartmentId" class="form-select form-select-sm"
+                            asp-items="@(new SelectList(Model.DepartmentsList, "DepartmentId", "DepartmentName"))">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+
+                <!-- Gender -->
+                <div class="col-md-6">
+                    <label class="form-label small d-block">Gender</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Employee.EmployeeGender" value="Male" id="male" />
+                        <label class="form-check-label small" for="male">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Employee.EmployeeGender" value="Female" id="female" />
+                        <label class="form-check-label small" for="female">Female</label>
+                    </div>
+                    <span asp-validation-for="Employee.EmployeeGender" class="text-danger small d-block"></span>
+                </div>
+
+                <!-- Hobbies -->
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Hobbies</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var hobby in Model.Hobbies)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="@hobby.HobbyId" name="SelectedHobbyIds" id="chk_@hobby.HobbyId" />
+                                <label class="form-check-label small" for="chk_@hobby.HobbyId">@hobby.HobbyText</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 text-end mt-2">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="bi bi-check-circle me-1"></i> Submit
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-sm ms-2">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

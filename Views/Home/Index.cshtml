@@ -1,0 +1,108 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<Crudify.Models.TblEmployeeViewModel>
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Employee List</h2>
+
+    <!-- Search Form -->
+    <form method="get" class="mb-3">
+        <div class="input-group w-50">
+            <input type="text" name="search" class="form-control" placeholder="Search by name..." value="@ViewBag.Search" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <!-- Add New Employee Button -->
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">+ Add New Employee</a>
+    </div>
+
+    <!-- Table -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Image</th>
+                <th>First Name</th>
+                <th>DOB</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Hobbies</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    if (item?.Employee != null)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Employee.EmployeePhoto))
+                                {
+                                    <img src="~/uploads/@item.Employee.EmployeePhoto" class="img-thumbnail" style="width:60px;height:60px;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Photo</span>
+                                }
+                            </td>
+                            <td>@item.Employee.EmployeeFirstName</td>
+                            <td>@item.Employee.EmployeeDateOfBirth.ToShortDateString()</td>
+                            <td>@item.Employee.EmployeeEmail</td>
+                            <td>@item.Employee.EmployeePhone</td>
+                            <td>
+                                <button class="btn btn-info btn-sm" onclick="viewHobbies(@item.Employee.EmployeeId)">View</button>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Employee.EmployeeId" class="btn btn-sm btn-warning">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Employee.EmployeeId" class="btn btn-sm btn-secondary">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Employee.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-danger">Employee data is missing</td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No employees found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, search = ViewBag.Search }),
+                 new PagedListRenderOptions
+        {
+            Display = PagedListDisplayMode.IfNeeded,
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" }
+        })
+
+    </div>
+</div>
+
+<!-- Place this just before </body> or wherever appropriate -->
+<partial name="_HobbiesPartial" />
+
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Employee.js"></script>
+}

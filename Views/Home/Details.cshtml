@@ -1,0 +1,77 @@
+﻿@model Crudify.Models.TblEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Personal Information</h4>
+    </div>
+    <div class="card-body">
+        @if (!string.IsNullOrEmpty(Model?.Employee?.EmployeePhoto))
+        {
+            <div class="text-center mb-3">
+                <img src="~/uploads/@Model.Employee.EmployeePhoto" alt="Employee Photo" class="img-fluid rounded" style="max-width: 200px;">
+            </div>
+        }
+
+        <dl class="row">
+            <dt class="col-sm-3">Name:</dt>
+            <dd class="col-sm-9">
+                @(Model?.Employee != null ? $"{Model.Employee.EmployeeFirstName} {Model.Employee.EmployeeLastName}" : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">
+                @(Model?.Employee?.EmployeeEmail ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Phone:</dt>
+            <dd class="col-sm-9">
+                @(Model?.Employee?.EmployeePhone ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Department:</dt>
+            <dd class="col-sm-9">
+                @(Model?.Employee?.Department?.DepartmentName ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Location:</dt>
+            <dd class="col-sm-9">
+                @{
+                    var location = string.Join(", ", new[] {
+                Model?.Employee?.Country?.CountryName,
+                Model?.Employee?.State?.StateName,
+                Model?.Employee?.City?.CityName
+                }.Where(s => !string.IsNullOrEmpty(s)));
+
+                    @location
+                }
+            </dd>
+
+            <dt class="col-sm-3">Hobbies:</dt>
+            <dd class="col-sm-9">
+                @if (Model?.Hobbies != null && Model.Hobbies.Any())
+                {
+                    <ul class="list-unstyled">
+                        @foreach (var hobby in Model.Hobbies)
+                        {
+                            <li>@hobby.HobbyText</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>No hobbies listed.</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer text-muted">
+        <a asp-action="Edit" asp-route-id="@Model?.Employee?.EmployeeId" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
